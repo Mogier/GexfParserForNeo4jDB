@@ -8,4 +8,4 @@ You'll need to [download Neo4j](http://neo4j.com/download/) , unzip it and place
 Note that this program **can't** proceed if your neo4j server is already running.
 
 #Warnings
-If the database located with the variable **PATH_TO_NEO4JDB** doesn't exist it will be created at the beginning of the program. Please note that for the moment, Nodes aren't unique so if you run the same code several times, your nodes will be duplicated.
+If the database located with the variable **PATH_TO_NEO4JDB** doesn't exist it will be created at the beginning of the program. Please note that for the moment, Nodes aren't unique so if you run the same code several times, your nodes and edges will be duplicated.
