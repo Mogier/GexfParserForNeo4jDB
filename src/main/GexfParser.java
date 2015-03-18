@@ -40,11 +40,12 @@ public class GexfParser {
 		    File file = new File(filePath);
 		    container = importController.importFile(file);
 		    container.getLoader().setEdgeDefault(EdgeDefault.DIRECTED);   //Force DIRECTED
+		    System.out.println("File open : " + file.getCanonicalPath());
 		} catch (Exception ex) {
 		    ex.printStackTrace();
 		    return null;
 		}
-		System.out.println("File open : " + filePath);
+		
 		//Append imported data to GraphAPI
 		importController.process(container, new DefaultProcessor(), workspace);
 
