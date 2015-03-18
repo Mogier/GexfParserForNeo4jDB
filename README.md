@@ -9,3 +9,7 @@ Note that this program **can't** proceed if your neo4j server is already running
 
 #Warnings
 If the database located with the variable **PATH_TO_NEO4JDB** doesn't exist it will be created at the beginning of the program.
+
+#Script and Runnable
+The script **script.sh** is usable in order to execute the runnable **gexfparserforneo4jdb.jar** to multiple files.
+Please edit it with the path to your files folder.
