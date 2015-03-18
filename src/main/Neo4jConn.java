@@ -53,9 +53,11 @@ public class Neo4jConn {
 	}
 	
 	public void putGexfInDB(GraphDatabaseService graphDb, Graph GEXFgraph) {
-
+		
 		try ( Transaction tx = graphDb.beginTx() )
 		{
+			int nodeSuccess =0;
+			int nodeFail = 0;
 			Label label = DynamicLabel.label( "Concept" );
 		    //Generate Nodes
 		    NodeIterator allGexfNodes = GEXFgraph.getNodes().iterator();		    
@@ -69,16 +71,21 @@ public class Neo4jConn {
 			    	currentNeoNode.setProperty("uri", currentGexfNode.getAttributes().getValue("url"));
 			    	currentNeoNode.setProperty("startingConcept", currentGexfNode.getAttributes().getValue("startingConcept"));
 			    	
-			    	System.out.println("Node created : " + currentNeoNode.toString());
+			    	nodeSuccess++;
 		    	} 
 		    	else {
-		    		System.out.println("Constraint violation.");
+		    		nodeFail++;
 		    	}		    			    	
 		    }
+		    System.out.println("Nodes creation completed.");
+		    System.out.println("Created : " + nodeSuccess);
+		    System.out.println("Alerady existing : " + nodeFail);
 		    
 		    //Generate Edges/Relationships
 	    	EdgeIterator allRelationships = GEXFgraph.getEdges().iterator();
+	    	int totalEdges=0;
 		    while(allRelationships.hasNext()) {
+		    	totalEdges++;
 		    	//Get the Edge from the graph
 		    	Edge currentGexfEdge = allRelationships.next();
 		    	String sourceURI = currentGexfEdge.getSource().getNodeData().getLabel();
@@ -91,6 +98,8 @@ public class Neo4jConn {
     	
 		    	sourceNode.createRelationshipTo(targetNode, edgeLabel.equals("equiv") ? RelTypes.EQUIV : RelTypes.PARENT);
 		    }
+		    System.out.println("Edges creation completed.");
+		    System.out.println(totalEdges + " created.");
 			
 		    tx.success();
 		}
