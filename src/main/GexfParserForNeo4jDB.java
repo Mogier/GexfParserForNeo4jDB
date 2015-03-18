@@ -9,15 +9,15 @@ import org.neo4j.graphdb.GraphDatabaseService;
 public class GexfParserForNeo4jDB {
 
 	static String PATH_TO_FILE = "";
-	///home/mael/Documents/WorkplaceEclipse/ProjetSpecifique5IF/generatedFiles/im1.gexf;
-	static final String PATH_TO_NEO4JDB = "/home/mael/Documents/neo4j-community-2.1.7/data/test.db";
+	static String PATH_TO_NEO4JDB = "";
 	
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		if(args.length>0){
+		if(args.length>1){
 			PATH_TO_FILE = args[0];
+			PATH_TO_NEO4JDB = args[1];
 			GraphDatabaseService graphDb;
 
 			GexfParser geParser = new GexfParser(PATH_TO_FILE);		
@@ -44,7 +44,7 @@ public class GexfParserForNeo4jDB {
 			graphDb.shutdown();
 		}
 		else {
-			System.err.println("Please indicate the path to .gexf file as 1st argument");
+			System.err.println("Please indicate the path to .gexf file as 1st argument and path to neo4j db as 2nd.");
 		}
 	}
 

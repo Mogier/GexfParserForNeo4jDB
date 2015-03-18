@@ -1,14 +1,11 @@
 package main;
 
-import java.util.Vector;
-
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.EdgeIterator;
 import org.gephi.graph.api.Graph;
 import org.gephi.graph.api.NodeIterator;
 import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.cypher.javacompat.ExecutionResult;
-import org.neo4j.graphdb.ConstraintViolationException;
 import org.neo4j.graphdb.DynamicLabel;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
@@ -16,10 +13,7 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.ResourceIterator;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
-import org.neo4j.graphdb.schema.IndexDefinition;
 import org.neo4j.graphdb.schema.Schema;
-
-import scala.collection.Iterator;
 
 public class Neo4jConn {
 

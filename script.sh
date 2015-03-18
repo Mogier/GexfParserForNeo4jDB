@@ -1,6 +1,7 @@
 #!/bin/bash
 
-directoryfile='/home/mael/Documents/testScript/*'
-for file in $directoryfile
-	do java -jar gexfparserforneo4jdb.jar "$file"
+filesDirectory='/home/mael/Documents/testScript/*'
+dbDirectory='/home/mael/Documents/neo4j-community-2.1.7/data/test.db'
+for file in $filesDirectory
+	do java -jar gexfparserforneo4jdb.jar "$file" $dbDirectory
 done
