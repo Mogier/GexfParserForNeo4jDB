@@ -1,7 +1,11 @@
 package main;
 
 
+import gexf.GexfParser;
+
 import java.io.File;
+
+import neo4j.Neo4jConn;
 
 import org.gephi.graph.api.Graph;
 import org.neo4j.graphdb.GraphDatabaseService;

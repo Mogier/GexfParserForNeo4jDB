@@ -1,4 +1,4 @@
-package main;
+package neo4j;
 
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.EdgeIterator;
@@ -65,7 +65,7 @@ public class Neo4jConn {
 		    	if(findConceptByURI((String) currentGexfNode.getAttributes().getValue("url"), graphDb)==null){
 		    		//create and set attributes to the node pushed in the DB
 			    	org.neo4j.graphdb.Node currentNeoNode = graphDb.createNode(label);
-			    	currentNeoNode.setProperty("uri", currentGexfNode.getAttributes().getValue("url"));
+			    	currentNeoNode.setProperty("uri", currentGexfNode.getAttributes().getValue("uri"));
 			    	currentNeoNode.setProperty("startingConcept", currentGexfNode.getAttributes().getValue("startingConcept"));
 			    	
 			    	nodeSuccess++;
