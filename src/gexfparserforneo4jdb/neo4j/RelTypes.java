@@ -1,4 +1,4 @@
-package neo4j;
+package gexfparserforneo4jdb.neo4j;
 
 import org.neo4j.graphdb.RelationshipType;
 

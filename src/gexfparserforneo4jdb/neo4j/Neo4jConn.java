@@ -1,4 +1,4 @@
-package neo4j;
+package gexfparserforneo4jdb.neo4j;
 
 import org.gephi.graph.api.Edge;
 import org.gephi.graph.api.EdgeIterator;
@@ -62,7 +62,7 @@ public class Neo4jConn {
 		    	//get the Node from the graph
 		    	org.gephi.graph.api.Node currentGexfNode = allGexfNodes.next();
 		    	
-		    	if(findConceptByURI((String) currentGexfNode.getAttributes().getValue("url"), graphDb)==null){
+		    	if(findConceptByURI((String) currentGexfNode.getAttributes().getValue("uri"), graphDb)==null){
 		    		//create and set attributes to the node pushed in the DB
 			    	org.neo4j.graphdb.Node currentNeoNode = graphDb.createNode(label);
 			    	currentNeoNode.setProperty("uri", currentGexfNode.getAttributes().getValue("uri"));

@@ -1,4 +1,4 @@
-package gexf;
+package gexfparserforneo4jdb.gexf;
 
 import java.io.File;
 

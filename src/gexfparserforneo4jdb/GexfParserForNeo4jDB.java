@@ -1,10 +1,10 @@
-package main;
+package gexfparserforneo4jdb;
 
 
-import gexf.GexfParser;
+import gexfparserforneo4jdb.gexf.GexfParser;
+import gexfparserforneo4jdb.neo4j.Neo4jConn;
 
 import java.io.File;
-import neo4j.Neo4jConn;
 
 import org.gephi.graph.api.Graph;
 import org.neo4j.graphdb.GraphDatabaseService;
@@ -47,7 +47,7 @@ public class GexfParserForNeo4jDB {
 			graphDb.shutdown();
 		}
 		else {
-			System.err.println("Please indicate the path to .gexf file as 1st argument and path to neo4j db as 2nd.");
+			System.err.println("Please indicate the path to .gexfparserforneo4jdb.gexf file as 1st argument and path to gexfparserforneo4jdb.neo4j db as 2nd.");
 		}
 	}
 
