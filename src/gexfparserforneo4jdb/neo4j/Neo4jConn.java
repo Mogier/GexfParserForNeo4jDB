@@ -13,6 +13,8 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.ResourceIterator;
 import org.neo4j.graphdb.Transaction;
+import org.neo4j.graphdb.event.TransactionData;
+import org.neo4j.graphdb.event.TransactionEventHandler;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.graphdb.schema.Schema;
 
@@ -30,22 +32,52 @@ public class Neo4jConn {
 	
 	public GraphDatabaseService startDBPlusConfiguration(String DBname) {
 		GraphDatabaseService graphDb = new GraphDatabaseFactory().newEmbeddedDatabase( DBname );
-		registerShutdownHook( graphDb );
+		final Node bottomNode;
 		Transaction tx = graphDb.beginTx();
 		try
 		{
-		    Schema schema = graphDb.schema();
-		  //Create unicity constraint on uris
-		    schema.constraintFor( DynamicLabel.label( "Concept" ) )
-            		.assertPropertyIsUnique( "uri" )
-        			.create();
-		    tx.success();
+			Schema schema = graphDb.schema();
+			//Create unicity constraint on uris
+			schema.constraintFor( DynamicLabel.label( "Concept" ) )
+					.assertPropertyIsUnique( "uri" )
+					.create();
+			tx.success();
 		} finally {
 			tx.close();
 		}
 		
+		Transaction tx2 = graphDb.beginTx();	
+		try
+		{
+			Label label = DynamicLabel.label( "Concept" );
+			bottomNode = graphDb.createNode(label);
+			bottomNode.setProperty("uri", "virtual:bottom");
+			bottomNode.setProperty("startingConcept", "false");
+			tx2.success();
+		} finally {
+			tx2.close();
+		}
 		
-		
+		graphDb.registerTransactionEventHandler(new TransactionEventHandler<Void>() {
+			 public Void beforeCommit(TransactionData data) throws Exception {
+				 for(Node createdNode : data.createdNodes()){
+					 System.out.println(createdNode.getProperty("uri"));
+					 if(((String)createdNode.getProperty("uri")).startsWith("base:")){
+						 bottomNode.createRelationshipTo(createdNode, RelTypes.VIRTUAL);
+					 }
+				 }				 
+			 return null;
+			 }
+			  
+			 public void afterCommit(TransactionData data, Void state) {
+			 System.out.println("Committed transaction");
+			 }
+			  
+			 public void afterRollback(TransactionData data, Void state) {
+			 System.out.println("Transaction rolled back");
+			 }
+		}); 
+		registerShutdownHook( graphDb );
 		return graphDb;
 	}
 	
