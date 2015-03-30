@@ -50,5 +50,4 @@ public class GexfParserForNeo4jDB {
 			System.err.println("Please indicate the path to .gexfparserforneo4jdb.gexf file as 1st argument and path to gexfparserforneo4jdb.neo4j db as 2nd.");
 		}
 	}
-
 }

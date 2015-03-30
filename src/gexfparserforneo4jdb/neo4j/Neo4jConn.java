@@ -26,6 +26,23 @@ public class Neo4jConn {
 
 	public GraphDatabaseService startDB(String DBname) {
 		GraphDatabaseService graphDb = new GraphDatabaseFactory().newEmbeddedDatabase( DBname );
+		final Node bottomNode = findConceptByURI("virtual:bottom", graphDb);
+		graphDb.registerTransactionEventHandler(new TransactionEventHandler<Void>() {
+			 public Void beforeCommit(TransactionData data) throws Exception {
+				 for(Node createdNode : data.createdNodes()){
+					 if(((String)createdNode.getProperty("uri")).startsWith("base:")){
+						 bottomNode.createRelationshipTo(createdNode, RelTypes.VIRTUAL);
+					 }
+				 }				 
+			 return null;
+			 }
+			  
+			 public void afterCommit(TransactionData data, Void state) {
+			 }
+			  
+			 public void afterRollback(TransactionData data, Void state) {
+			 }
+		}); 
 		registerShutdownHook( graphDb );
 		return graphDb;
 	}
@@ -61,7 +78,6 @@ public class Neo4jConn {
 		graphDb.registerTransactionEventHandler(new TransactionEventHandler<Void>() {
 			 public Void beforeCommit(TransactionData data) throws Exception {
 				 for(Node createdNode : data.createdNodes()){
-					 System.out.println(createdNode.getProperty("uri"));
 					 if(((String)createdNode.getProperty("uri")).startsWith("base:")){
 						 bottomNode.createRelationshipTo(createdNode, RelTypes.VIRTUAL);
 					 }
@@ -70,11 +86,9 @@ public class Neo4jConn {
 			 }
 			  
 			 public void afterCommit(TransactionData data, Void state) {
-			 System.out.println("Committed transaction");
 			 }
 			  
 			 public void afterRollback(TransactionData data, Void state) {
-			 System.out.println("Transaction rolled back");
 			 }
 		}); 
 		registerShutdownHook( graphDb );

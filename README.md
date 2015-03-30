@@ -2,7 +2,9 @@
 This program read a .gexf file and push the graph to a Neo4j database.
 
 # Configuration
-Please edit the main class **GexfParserForNeo4jDB.java** with your personnal parameters.
+Please call the main class **GexfParserForNeo4jDB.java** with 2 parameters :
+- Path to the gexf file 
+- Path to the Neo4j database
 You'll need to [download Neo4j](http://neo4j.com/download/) , unzip it and place it in your favorite repository.
 
 Note that this program **can't** proceed if your neo4j server is already running.
