@@ -27,11 +27,14 @@ public class Neo4jConn {
 	public GraphDatabaseService startDB(String DBname) {
 		GraphDatabaseService graphDb = new GraphDatabaseFactory().newEmbeddedDatabase( DBname );
 		final Node bottomNode = findConceptByURI("virtual:bottom", graphDb);
+		final Node topNode = findConceptByURI("virtual:top", graphDb);
 		graphDb.registerTransactionEventHandler(new TransactionEventHandler<Void>() {
 			 public Void beforeCommit(TransactionData data) throws Exception {
 				 for(Node createdNode : data.createdNodes()){
 					 if(((String)createdNode.getProperty("uri")).startsWith("base:")){
 						 bottomNode.createRelationshipTo(createdNode, RelTypes.VIRTUAL);
+					 } else if (createdNode.getProperty("uri").equals("Wordnet:entity")|| createdNode.getProperty("uri").equals("http://www.w3.org/2002/07/owl#Thing")) {
+						 createdNode.createRelationshipTo(topNode, RelTypes.VIRTUAL);
 					 }
 				 }				 
 			 return null;
@@ -50,6 +53,7 @@ public class Neo4jConn {
 	public GraphDatabaseService startDBPlusConfiguration(String DBname) {
 		GraphDatabaseService graphDb = new GraphDatabaseFactory().newEmbeddedDatabase( DBname );
 		final Node bottomNode;
+		final Node topNode;
 		Transaction tx = graphDb.beginTx();
 		try
 		{
@@ -67,19 +71,26 @@ public class Neo4jConn {
 		try
 		{
 			Label label = DynamicLabel.label( "Concept" );
+			
 			bottomNode = graphDb.createNode(label);
 			bottomNode.setProperty("uri", "virtual:bottom");
 			bottomNode.setProperty("startingConcept", "false");
+			
+			topNode = graphDb.createNode(label);
+			topNode.setProperty("uri", "virtual:top");
+			topNode.setProperty("startingConcept", "false");
 			tx2.success();
 		} finally {
 			tx2.close();
 		}
 		
 		graphDb.registerTransactionEventHandler(new TransactionEventHandler<Void>() {
-			 public Void beforeCommit(TransactionData data) throws Exception {
+			public Void beforeCommit(TransactionData data) throws Exception {
 				 for(Node createdNode : data.createdNodes()){
 					 if(((String)createdNode.getProperty("uri")).startsWith("base:")){
 						 bottomNode.createRelationshipTo(createdNode, RelTypes.VIRTUAL);
+					 } else if (createdNode.getProperty("uri").equals("Wordnet:entity")|| createdNode.getProperty("uri").equals("http://www.w3.org/2002/07/owl#Thing")) {
+						 createdNode.createRelationshipTo(topNode, RelTypes.VIRTUAL);
 					 }
 				 }				 
 			 return null;
